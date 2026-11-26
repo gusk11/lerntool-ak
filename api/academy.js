@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
   const b = req.body || {};
   try {
     if (b.action === 'teacher') {
-      const pw = process.env.TEACHER_PASSWORD;
+      const pw = process.env.TEACHER_PASSWORD || process.env.teacher_password;
       if (!pw || !same(b.password || '', pw)) return res.status(401).json({ error: 'Wrong teacher password.' });
       const ids = await redis('SMEMBERS', 'acad:students');
       const vals = ids.length ? await redis('MGET', ...ids.map(key)) : [];
